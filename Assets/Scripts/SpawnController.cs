@@ -1,21 +1,35 @@
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SquareSpawner : MonoBehaviour
+public class SpawnController : MonoBehaviour
 {
     Vector2 blCorner;
     Vector2 tlCorner;
     Vector2 brCorner;
     Vector2 trCorner;
 
+    public GameObject square;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            Instantiate(square);
+        }
+
+        //semi transparent square
+
         //get mouse position
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-
-        //get scroll value
-        Vector2 scrollWheel = Mouse.current.scroll.ReadValue();
 
         //figure out where the lines should be
         blCorner.x = mousePos.x - 1; blCorner.y = mousePos.y - 1;
@@ -23,16 +37,13 @@ public class SquareSpawner : MonoBehaviour
         tlCorner.x = mousePos.x - 1; tlCorner.y = mousePos.y + 1;
         trCorner.x = mousePos.x + 1; trCorner.y = mousePos.y + 1;
 
-        //print scroll value 
-        Debug.Log(scrollWheel);
+        Debug.DrawLine(blCorner, brCorner, Color.grey);
+        Debug.DrawLine(brCorner, trCorner, Color.grey);
+        Debug.DrawLine(trCorner, tlCorner, Color.grey);
+        Debug.DrawLine(tlCorner, blCorner, Color.grey);
+
+        //scroll wheel
+        Vector2 scrollWheel = Mouse.current.scroll.ReadValue();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.DrawLine(blCorner, brCorner, Color.white);
-        Debug.DrawLine(brCorner, trCorner, Color.white);
-        Debug.DrawLine(trCorner, tlCorner, Color.white);
-        Debug.DrawLine(tlCorner, blCorner, Color.white);
-    }
 }
